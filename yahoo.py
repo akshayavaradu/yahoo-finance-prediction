@@ -1,8 +1,8 @@
-!pip install streamlit
-!pip install yfinance
-!pip install scikit-learn
-!pip install plotly
-!pip install seaborn
+pip install streamlit
+pip install yfinance
+pip install scikit-learn
+pip install plotly
+pip install seaborn
 
 import streamlit as st
 import pandas as pd
