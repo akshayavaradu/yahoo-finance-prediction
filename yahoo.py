@@ -361,7 +361,7 @@ def arima():
 # Add navigation options in the first column
 with col1:
     st.write("**Navigation**")
-    page = st.radio("Go to", ["Yahoo finance basics", "Time series model basics", "Explaining data","Charts and comparisons","Output"])
+    page = st.radio("Go to", ["Yahoo finance basics", "Time series model basics", "Explaining data","Output"])
 
 # Partition 1: Section 1
 with col2:
@@ -441,14 +441,6 @@ with col2:
         st.write("Input table looks like this: ")
         st.table(data.head())
 
-    elif page == "Charts and comparisons":
-        st.markdown('Close price of GOOG')
-        st.image('C:/Users/akshaya.v/Desktop/Finance_project/Close_price_with_trendline.png')
-        st.markdown('Close price of NVDA')
-        st.image('C:/Users/akshaya.v/Desktop/Finance_project/Close_price_NVDA.png')
-        st.markdown("To visualize more images and charts, please refer to the colab notebook")
-        st.write("Google Colab notebook [Link](https://colab.research.google.com/drive/1Is6s1-qpP354ys9yR6biTN_NzAsCNlgI?usp=sharing)")
-        
         
     elif page=='Output':
         st.write("Google Colab notebook [Link](https://colab.research.google.com/drive/1Is6s1-qpP354ys9yR6biTN_NzAsCNlgI?usp=sharing)")
