@@ -3,3 +3,9 @@ numpy
 pandas
 pydeck
 streamlit
+scikit-learn
+yfinance
+seaborn
+plotly
+prophet
+statsmodels
