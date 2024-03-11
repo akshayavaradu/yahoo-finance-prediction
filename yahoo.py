@@ -207,17 +207,16 @@ def prophet_multi():
 
 
 def prophet_multi_hp():
-        #PROPHET MULTI HYPERPARAMETER TUNED
     prophet_multi=data[['ds','y','TSLA']].copy()
-    # Split prophet_multi into train and test sets
+# Split prophet_multi into train and test sets
     train = prophet_multi[prophet_multi['ds'] <= train_end_date]
     test = prophet_multi[prophet_multi['ds'] > train_end_date]
 
     # Define the parameter grid for hyperparameter tuning
     param_grid = {
-        'changepoint_prior_scale': [0.001, 0.01, 0.1, 0.5],
-        'seasonality_prior_scale': [0.01, 0.1, 1.0, 10.0],
-        'holidays_prior_scale': [0.01, 0.1, 1.0, 10.0],
+        'changepoint_prior_scale': [0.001, 0.01, 0.1, 0.2,0.4,0.3],
+        'seasonality_prior_scale': [0.01, 0.1, 1.0, 10.0,0.2,0.3],
+        'holidays_prior_scale': [0.01, 0.1, 1.0, 10.0,0.3,0.5],
         # Add more hyperparameters to tune
     }
 
@@ -230,7 +229,7 @@ def prophet_multi_hp():
     for params in ParameterGrid(param_grid):
         try:
             # Initialize Prophet model with the current set of hyperparameters
-            prophet = Prophet(growth="linear", yearly_seasonality=False, interval_width=0.95, weekly_seasonality=False, **params)
+            prophet = Prophet(growth="linear", yearly_seasonality=True, interval_width=0.95, weekly_seasonality=False, **params)
 
             # Add additional regressors
             prophet.add_regressor('TSLA')
@@ -239,11 +238,11 @@ def prophet_multi_hp():
             prophet.fit(train)
 
             # Make predictions on the test set
-            prophet_multi_hp_forecast = prophet.predict(test)
+            forecast = prophet.predict(test)
 
             # Calculate RMSE and MAPE
-            rmse = np.sqrt(mean_squared_error(test['y'], prophet_multi_hp_forecast['yhat']))
-            mape = mean_absolute_percentage_error(test['y'], prophet_multi_hp_forecast['yhat'])
+            rmse = np.sqrt(mean_squared_error(test['y'], forecast['yhat']))
+            mape = mean_absolute_percentage_error(test['y'], forecast['yhat'])
 
             # Check if the current model is better than the previous best model
             if rmse < prophet_multi_hp_rmse:
@@ -253,63 +252,13 @@ def prophet_multi_hp():
 
         except Exception as e:
             print("Error occurred during Prophet model fitting:", str(e))
-    prophet_multi_hp_forecast=prophet.predict(test)
+
+    
 # Print the best model's metrics
-    st.write("Best RMSE:", prophet_multi_hp_rmse)
-    st.write("Best MAPE:", prophet_multi_hp_mape)
-    st.write("Best model:", prophet_multi_hp_best_params.params)
+    st.write("Prophet multivariate hypertuned RMSE:", prophet_multi_hp_rmse)
+    st.write("Prophet multivariate hypertuned MAPE:", prophet_multi_hp_mape)
 
-def prophet_multi_hp_wos():
-    #PROPHET MULTI HYPERPARAMETER TUNED
-    prophet_multi=data[['ds','y','TSLA']].copy()
-    # Split prophet_multi into train and test sets
-    train = prophet_multi[prophet_multi['ds'] <= train_end_date]
-    test = prophet_multi[prophet_multi['ds'] > train_end_date]
 
-    # Define the parameter grid for hyperparameter tuning
-    param_grid = {
-        'changepoint_prior_scale': [0.001, 0.01, 0.1, 0.5],
-        # Add more hyperparameters to tune
-    }
-
-    # Initialize variables to store the best model and its metrics
-    prophet_multi_hp_wos_best_params = None
-    prophet_multi_hp_wos_rmse = np.inf
-    prophet_multi_hp_wos_mape = np.inf
-
-    # Iterate over each combination of hyperparameters
-    for params in ParameterGrid(param_grid):
-        try:
-            # Initialize Prophet model with the current set of hyperparameters
-            prophet = Prophet(growth="linear", yearly_seasonality=False, interval_width=0.95, weekly_seasonality=False, **params)
-
-            # Add additional regressors
-            prophet.add_regressor('TSLA')
-
-            # Fit the model on the training data
-            prophet.fit(train)
-
-            # Make predictions on the test set
-            prophet_multi_hp_wos_forecast = prophet.predict(test)
-
-            # Calculate RMSE and MAPE
-            rmse = np.sqrt(mean_squared_error(test['y'], prophet_multi_hp_wos_forecast['yhat']))
-            mape = mean_absolute_percentage_error(test['y'], prophet_multi_hp_wos_forecast['yhat'])
-
-            # Check if the current model is better than the previous best model
-            if rmse < prophet_multi_hp_wos_rmse:
-                prophet_multi_hp_wos_rmse = rmse
-                prophet_multi_hp_wos_mape = mape
-                prophet_multi_hp_wos_best_params = prophet
-
-        except Exception as e:
-            print("Error occurred during Prophet model fitting:", str(e))
-    prophet_multi_hp_wos_forecast=prophet.predict(test)
-    # Print the best model's metrics
-    st.write("Best RMSE:", prophet_multi_hp_wos_rmse)
-    st.write("Best MAPE:", prophet_multi_hp_wos_mape)
-    st.write("Best model:", prophet_multi_hp_wos_best_params.params)
-    st.write(prophet_multi_hp_wos_forecast[['ds','yhat']])
 
 def arima():
     
@@ -472,7 +421,7 @@ with col2:
         #ExponentialSmoothing
         option = st.selectbox(
         'You want to see output of which model?',
-        ('ARIMA', 'Exponential smoothing', 'PROPHET Univariate','PROPHET Univariate Hyper tuned','PROPHET Multivariate','PROPHET Multivariate Hypertuned with Seasonality and holidays','PROPHET Multivariate Hypertuned without Seasonality and holidays','ALL'))
+        ('ARIMA', 'Exponential smoothing', 'PROPHET Univariate','PROPHET Univariate Hyper tuned','PROPHET Multivariate','PROPHET Multivariate Hypertuned','ALL'))
         st.write('You selected:', option)
         if option=="ARIMA":
             st.header("ARIMA OUTPUT METRICS")
@@ -489,17 +438,15 @@ with col2:
         elif option=="PROPHET Multivariate":
             st.header("PROPHET Multivariate METRICS OUTPUT")
             prophet_multi()
-        elif option=="PROPHET Multivariate Hypertuned with Seasonality and holidays":
+        elif option=="PROPHET Multivariate Hypertuned":
             st.header("PROPHET Multivariate with hyper tuned paramenters METRICS OUTPUT")
             prophet_multi_hp()
-        elif option=="PROPHET Multivariate Hypertuned without Seasonality and holidays":
-            st.header("PROPHET Multivariate with hyper tuned paramenters METRICS OUTPUT")
-            prophet_multi_hp_wos()
+        
         else:
             data = {
-            'Model': ['ARIMA','PROPHET UNIVARIATE (NORMAL)','PROPHET MULTIVARIATE (NORMAL)','PROPHET UNIVARIATE (HYPERPARAMETER TUNED)','PROPHET MULTIVARIATE (HYPER PARAMETER TUNED) WITH SEASONALITY AND HOLIDAYS','EXPONENTIAL SMOOTHING','PROPHET MULTIVARIATE (HYPER PARAMETER TUNED) WITHOUT SEASONALITY AND HOLIDAYS'],
-            'RMSE': [19.85,31.67,34.43,13.33,9.22,33.78,12.52],
-            'MAPE (%)': [13.65,21.28,22.9,8.64,6.53,23.1,7.96]}
+            'Model': ['ARIMA','PROPHET UNIVARIATE (NORMAL)','PROPHET MULTIVARIATE (NORMAL)','PROPHET UNIVARIATE (HYPERPARAMETER TUNED)','PROPHET MULTIVARIATE (HYPER PARAMETER TUNED)','EXPONENTIAL SMOOTHING'],
+            'RMSE': [19.85,31.67,34.43,13.33,10.23,33.78],
+            'MAPE (%)': [13.65,21.28,22.9,8.64,6.73,23.1]}
             df = pd.DataFrame(data)
                # Display the DataFrame as a table
             st.table(df)
@@ -508,8 +455,7 @@ with col2:
                             The prediction for next 12 months using prophet is """)
             data = {
                     'Date': ['31-3-2024','30-4-2024','31-5-2024','30-6-2024','31-7-2024','31-8-2024','30-9-2024','31-10-2024','30-11-2024','31-12-2024','31-1-2025','28-2-2025'],
-                    'Close value prediction': [86.7195377947696,85.7761133532284,84.8012414303025,83.8578169887613,82.8829450658354,81.9080731429095,80.9646487013683,79.9897767784424,79.0463523369012,78.0714804139754,77.0966084910495,76.2160790122776]
-                }
+                    'Close value prediction': [134.76,135.19,135.87,137.07,138.90,140.42,139.90,140.31,141.76,142.34,143.36,144.94]
             df = pd.DataFrame(data)
                 # Display the DataFrame as a table
             st.table(df)
