@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "ac9f5547-fa8b-4127-b9fb-b1c7cc944222",
+		"name": "Yahoo_prediction",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27113690",
+		"_collection_link": "https://www.postman.com/akshaya-v/workspace/myworkspace/collection/27113690-ac9f5547-fa8b-4127-b9fb-b1c7cc944222?action=share&source=collection_link&creator=27113690"
+	},
+	"item": [
+		{
+			"name": "Arima",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/final_prediction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"final_prediction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exponential_Smoothing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/final_prediction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"final_prediction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prophet Univariate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/final_prediction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"final_prediction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prophet Univariate Hyperparameters tuned",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/final_prediction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"final_prediction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prophet Multivariate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/final_prediction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"final_prediction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prophet Multivariate Hyperparameters tuned",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/final_prediction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"final_prediction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Next 12 months prediction",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/final_prediction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"final_prediction"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
